@@ -1,269 +1,197 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invitación Pro: ElectroLearn</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación ElectroLearn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #000; 
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; overflow: hidden; 
+            font-family: 'Great Vibes', cursive; color: white;
+        }
 
-<!-- FUENTE CALIGRAFÍA -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+        /* 1. FUEGOS ARTIFICIALES */
+        #fireworksCanvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none;
+        }
 
-<style>
-body {
-    margin: 0;
-    background: #050505;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-}
+        /* 2. TELÓN */
+        .curtain-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; z-index: 1000; pointer-events: none;
+        }
+        .door {
+            width: 50%; height: 100%;
+            background: repeating-linear-gradient(to right, #800000, #b30000 15px, #660000 30px);
+            box-shadow: inset 0 0 100px #000;
+            transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .opened .door-left { transform: translateX(-100%); }
+        .opened .door-right { transform: translateX(100%); }
 
-/* TELÓN */
-.container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    z-index: 10000;
-}
+        /* 3. TARJETA */
+        .tarjeta {
+            position: relative; z-index: 10;
+            width: 90vw; max-width: 380px; height: 90vh;
+            border-radius: 30px;
+            display: flex; flex-direction: column; 
+            justify-content: space-between; align-items: center;
+            text-align: center; padding: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+            opacity: 0;
+            animation: fadeInCard 1.5s forwards 1.5s;
+        }
 
-.door {
-    width: 50%;
-    height: 100%;
-    background: repeating-linear-gradient(
-        to right,
-        #800000,
-        #a00000 10px,
-        #700000 20px
-    );
-    box-shadow: inset 0 0 60px rgba(0,0,0,0.9);
-}
+        .tarjeta::before {
+            content: "";
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('images/fondo.jpg') center/cover no-repeat;
+            opacity: 0.5;
+            z-index: -1;
+        }
 
-.door-left { animation: openLeft 2s forwards; }
-.door-right { animation: openRight 2s forwards; }
+        /* 4. LOGOS - CORREGIDOS */
+        .logo-img {
+            height: 90px; /* Altura fija para asegurar visibilidad */
+            width: auto;
+            object-fit: contain;
+            flex-shrink: 0; /* EVITA QUE EL TEXTO LO APLASTE */
+            opacity: 0;
+            z-index: 20;
+            animation: fadeIn 1s forwards 2.5s;
+        }
 
-@keyframes openLeft { 100% { transform: translateX(-100%); } }
-@keyframes openRight { 100% { transform: translateX(100%); } }
+        /* 5. CONTENIDO */
+        .contenido-central {
+            flex: 1; 
+            display: flex; flex-direction: column; 
+            justify-content: center; gap: 5px;
+            width: 100%;
+            opacity: 0;
+            animation: fadeIn 1s forwards 3.5s;
+        }
 
-/* TARJETA */
-.tarjeta { 
-    width: 90vw;
-    height: 90vh;
-    max-width: 360px;
-    max-height: 540px;
-    background-image: url('images/fondo.jpg');
-    background-size: cover;
-    background-position: center;
-    border-radius: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2;
-    opacity: 0.9;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-}
+        .shake-text {
+            display: inline-block;
+            animation: shake 0.6s infinite;
+        }
 
-/* CONTENIDO CENTRADO Y CALIGRAFÍA */
-.contenido { 
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    color: white;
-    font-family: 'Great Vibes', cursive;
-    letter-spacing: 1px;
-}
+        h1 { font-size: 38px; text-shadow: 2px 2px 10px #000; color: #ffd700; margin-bottom: 5px; }
+        p { font-size: 24px; line-height: 1.1; }
+        .nombre-profe { font-size: 34px; color: #fff; margin: 5px 0; }
 
-/* LOGOS */
-.logo {
-    max-width: 120px;
-    margin: 10px auto;
-    opacity: 0;
-    animation: aparecerLogo 1s forwards;
-}
+        button {
+            background: linear-gradient(45deg, #1e3c72, #2a5298);
+            color: white; border: none; padding: 10px 20px;
+            border-radius: 50px; font-family: 'Great Vibes', cursive;
+            font-size: 20px; cursor: pointer;
+            margin-top: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+            flex-shrink: 0;
+        }
 
-.logo-top { animation-delay: 2.5s; }
-.logo-bottom { animation-delay: 3s; }
-
-@keyframes aparecerLogo {
-    to { opacity: 1; transform: scale(1.1); }
-}
-
-/* TEXTO */
-.contenido h1,
-.contenido h2,
-.contenido h3,
-.contenido p,
-.contenido button {
-    opacity: 0;
-    animation: aparecerTexto 1s forwards;
-    animation-delay: 3.5s;
-}
-.contenido p{
-    font-size: 25px;
-}
-
-@keyframes aparecerTexto {
-    to { opacity: 1; }
-}
-
-/* TEMBLOR */
-@keyframes temblor {
-    0% { transform: translate(0,0); }
-    25% { transform: translate(1px,-1px); }
-    50% { transform: translate(-1px,1px); }
-    75% { transform: translate(1px,1px); }
-    100% { transform: translate(0,0); }
-}
-
-.nombre, h1, h3 {
-    animation: aparecerTexto 1s forwards, temblor 0.3s infinite;
-    animation-delay: 3.5s, 4.5s;
-}
-
-/* BOTÓN */
-button {
-    background: linear-gradient(45deg, #2a5298, #1e3c72);
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 25px;
-    cursor: pointer;
-}
-
-button:hover {
-    transform: scale(1.1);
-}
-
-.fecha{
-    font-size: 20px;
-    margin: 15px 0;
-    color: #fff;
-    text-shadow: 0 0 10px rgba(255,255,255,0.7);
-}
-
-/* FUEGOS */
-#fireworksCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1;
-    pointer-events: none;
-}
-</style>
+        /* ANIMACIONES */
+        @keyframes fadeInCard { to { opacity: 1; box-shadow: 0 0 40px rgba(0,0,0,0.8); } }
+        @keyframes fadeIn { to { opacity: 1; } }
+        
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            25% { transform: translate(-1px, -1px) rotate(-0.5deg); }
+            50% { transform: translate(-2px, 0px) rotate(0.5deg); }
+            75% { transform: translate(2px, 1px) rotate(0deg); }
+            100% { transform: translate(1px, -1px) rotate(0.5deg); }
+        }
+    </style>
 </head>
+<body onload="iniciarSecuencia()">
 
-<body>
+    <canvas id="fireworksCanvas"></canvas>
+    <audio id="aplausos" src="https://www.soundjay.com/human/applause-01.mp3"></audio>
 
-<!-- AUDIO -->
-<audio id="aplausos" src="https://www.soundjay.com/human/applause-01.mp3"></audio>
-
-<!-- TELÓN -->
-<div class="container">
-    <div class="door door-left"></div>
-    <div class="door door-right"></div>
-</div>
-
-<canvas id="fireworksCanvas"></canvas>
-
-<!-- TARJETA -->
-<div class="tarjeta">
-    <div class="contenido">
-
-        <img src="images/logo1.png" class="logo logo-top">
-
-        <h1>🎓 Invitación Especial</h1>
-        <h2>Estimado/a</h2>
-        <h2 class="nombre">Nombre Del Profesor</h2>
-        <p>Está cordialmente invitado a la presentación:</p>
-        <p class="fecha">📅 16 de mayo de 2026<br>⏰ 11:00 a.m.</p>
-        <h3>💡 ElectroLearn</h3>
-
-        <button onclick="confirmar()">Confirmar asistencia</button>
-
-        <img src="images/logo2.jpg" class="logo logo-bottom">
-
+    <div class="curtain-container" id="curtain">
+        <div class="door door-left"></div>
+        <div class="door door-right"></div>
     </div>
-</div>
 
-<script>
-// APLAUSOS
-document.addEventListener("click", () => {
-    document.getElementById("aplausos").play();
-}, { once: true });
+    <div class="tarjeta">
+        <img src="images/logo1.png" alt="Logo 1" class="logo-img">
 
-// FUEGOS
-const canvas = document.getElementById('fireworksCanvas');
-const ctx = canvas.getContext('2d');
-let particles = [];
+        <div class="contenido-central">
+            <h1 class="shake-text">Invitación Especial</h1>
+            <p>Estimado/a Prof.</p>
+            <div class="nombre-profe shake-text">Nombre Del Profesor</div>
+            <p>Presentación de:</p>
+            <div class="shake-text" style="font-size: 34px; color: #00d4ff;">💡 ElectroLearn</div>
+            <p>📅 16 de mayo, 2026<br>⏰ 11:00 a.m.</p>
+            <div>
+                <button onclick="confirmar()">Confirmar asistencia</button>
+            </div>
+        </div>
 
-function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-window.onresize = resize;
-resize();
+        <img src="images/logo2.jpg" alt="Logo 2" class="logo-img">
+    </div>
 
-class Particle {
-    constructor(x, y, color) {
-        this.x = x;
-        this.y = y;
-        this.color = color;
-        this.vx = (Math.random() - 0.5) * 8;
-        this.vy = (Math.random() - 0.5) * 8;
-        this.alpha = 1;
-        this.decay = 0.02;
-    }
+    <script>
+        function iniciarSecuencia() {
+            setTimeout(() => {
+                document.getElementById('curtain').classList.add('opened');
+                iniciarFuegos();
+            }, 500);
+        }
 
-    update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        this.alpha -= this.decay;
-    }
+        function confirmar() {
+            alert("¡Asistencia confirmada!");
+            document.getElementById('aplausos').play();
+        }
 
-    draw() {
-        ctx.globalAlpha = this.alpha;
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-        ctx.fill();
-    }
-}
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
 
-function createExplosion(x, y) {
-    const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
-    for (let i = 0; i < 50; i++) {
-        particles.push(new Particle(x, y, color));
-    }
-}
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        resize();
 
-function animate() {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x; this.y = y; this.color = color;
+                this.vx = (Math.random() - 0.5) * 10;
+                this.vy = (Math.random() - 0.5) * 10;
+                this.alpha = 1;
+            }
+            draw() {
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI * 2); ctx.fill();
+            }
+            update() { this.x += this.vx; this.y += this.vy; this.alpha -= 0.015; }
+        }
 
-    particles.forEach((p, i) => {
-        p.update();
-        p.draw();
-        if (p.alpha <= 0) particles.splice(i, 1);
-    });
+        function spawnExplosion() {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * (canvas.height * 0.7);
+            const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+            for (let i = 0; i < 40; i++) particles.push(new Particle(x, y, color));
+        }
 
-    requestAnimationFrame(animate);
-}
-
-setInterval(() => {
-    createExplosion(Math.random() * canvas.width, Math.random() * canvas.height * 0.5);
-}, 800);
-
-animate();
-
-function confirmar() {
-    alert("¡Gracias por confirmar!");
-}
-</script>
-
+        function iniciarFuegos() {
+            function animate() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                particles.forEach((p, i) => {
+                    if (p.alpha <= 0) particles.splice(i, 1);
+                    else { p.update(); p.draw(); }
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+            setInterval(spawnExplosion, 600);
+        }
+    </script>
 </body>
 </html>
