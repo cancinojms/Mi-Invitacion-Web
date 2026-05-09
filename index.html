@@ -2,10 +2,13 @@
 <html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>Invitación ElectroLearn</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+
     <style>
         * {
             margin: 0;
@@ -13,53 +16,55 @@
             box-sizing: border-box;
         }
 
+        html,
         body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Montserrat', sans-serif;
             background: #000;
+        }
+
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100dvh;
-            
-            overflow: hidden;
-            font-family: 'Montserrat', sans-serif;
-            color: white;
+            position: relative;
         }
 
-        @media screen and (max-width: 600px) {
-            body {
-                height: 100dvh;
-                max-height: 100dvh;
-                padding: 2em 0em;
-            }
-        }
+        /* =========================
+           FUEGOS ARTIFICIALES
+        ========================== */
 
-        /* 1. FUEGOS ARTIFICIALES */
         #fireworksCanvas {
             position: fixed;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100%;
             height: 100%;
             z-index: 1;
             pointer-events: none;
         }
 
-        /* 2. TELÓN */
+        /* =========================
+           TELÓN
+        ========================== */
+
         .curtain-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             display: flex;
-            z-index: 1000;
+            z-index: 9999;
             pointer-events: none;
         }
 
         .door {
             width: 50%;
             height: 100%;
-            background: repeating-linear-gradient(to right, #800000, #b30000 15px, #660000 30px);
+            background:
+                repeating-linear-gradient(to right,
+                    #800000,
+                    #b30000 15px,
+                    #660000 30px);
             box-shadow: inset 0 0 100px #000;
             transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -72,132 +77,169 @@
             transform: translateX(100%);
         }
 
-        /* 3. TARJETA */
+        /* =========================
+           TARJETA
+        ========================== */
+
         .tarjeta {
             position: relative;
             z-index: 10;
-            width: 90vw;
-            max-width: 380px;
-            height: 90vh;
+
+            width: 92vw;
+            max-width: 390px;
+            height: 94dvh;
 
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
+
             text-align: center;
-            /* Ajuste de padding: menos arriba para subir el primer logo */
-            padding: 15px 25px 40px 25px;
-            /*overflow: hidden;*/
-            border: 1px solid rgba(255, 255, 255, 0.2);
+
+            padding: 70px 20px 70px;
+
+            border-radius: 20px;
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            overflow: hidden;
+
             opacity: 0;
+
             animation: fadeInCard 1.5s forwards 1.5s;
         }
 
         .tarjeta::before {
             content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('images/fondo.jpg') center/cover no-repeat;
-            opacity: 0.6;
+            inset: 0;
+
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.55),
+                    rgba(0, 0, 0, 0.55)),
+                url('images/fondo.jpg') center/cover no-repeat;
+
             z-index: -1;
         }
 
-        /* 4. LOGOS - AJUSTADOS HACIA ARRIBA */
-        .logo-img {
-            height: 60px;
-            position: absolute;
+        /* =========================
+           LOGOS
+        ========================== */
 
+        .logo-img {
+            position: absolute;
             width: auto;
             object-fit: contain;
-            flex-shrink: 0;
             opacity: 0;
             z-index: 20;
+
             animation: fadeIn 1s forwards 2.5s;
         }
 
         .logo-superior {
-            top: -.5em;
-            z-index: 9999;
-
-            margin-top: 5px;
-            /* Sube el logo inicial */
+            top: 12px;
+            height: 70px;
         }
 
         .logo-inferior {
-            bottom: -1em;
-            margin-bottom: 20px;
-            /* Despega el logo del borde inferior */
+            bottom: 12px;
+            height: 60px;
         }
 
-        /* 5. CONTENIDO */
+        /* =========================
+           CONTENIDO
+        ========================== */
+
         .contenido-central {
-            flex: 1;
+            width: 100%;
+
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 10px;
-            width: 100%;
+            align-items: center;
+
+            gap: 12px;
+
+            flex: 1;
+
             opacity: 0;
+
             animation: fadeIn 1s forwards 3.5s;
         }
 
         p {
-            font-size: 17px;
-            font-weight: 300;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.4;
             text-shadow: 1px 1px 5px #000;
         }
 
+        #tituloNombre {
+            font-size: 17px;
+            font-weight: 500;
+        }
+
         .nombre-profe {
-            font-size: 23px;
-            font-weight: 600;
+            font-size: 24px;
+            font-weight: 700;
             color: #ffd700;
-            margin-bottom: 5px;
-            text-shadow: 2px 2px 8px #000;
+            line-height: 1.3;
+
+            text-shadow:
+                0 0 10px rgba(255, 215, 0, 0.5),
+                2px 2px 8px #000;
         }
 
         .electro-titulo {
-            font-size: 30px;
-            font-weight: 600;
+            font-size: 34px;
+            font-weight: 700;
+
             color: #00d4ff;
+
             letter-spacing: 2px;
             text-transform: uppercase;
+
             animation: elegantGlow 3s ease-in-out infinite;
-            margin: 8px 0;
-        }
 
-        @keyframes elegantGlow {
+            margin-top: 8px;
+            margin-bottom: 8px;
 
-            0%,
-            100% {
-                text-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
-                opacity: 0.8;
-            }
-
-            50% {
-                text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 30px rgba(0, 212, 255, 0.4);
-                opacity: 1;
-            }
+            line-height: 1.1;
         }
 
         .texto-alumnos {
-            font-size: 15px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 700;
             color: #ffd700;
-            margin-top: 10px;
-            text-transform: uppercase;
+
             letter-spacing: 1px;
+            text-transform: uppercase;
+
+            margin-top: 8px;
         }
 
         .integrantes {
-            font-size: 14px;
-            line-height: 1.5;
-            color: #ffffff;
-            font-weight: 400;
-            text-shadow: 1px 1px 3px #000;
+            font-size: 15px;
+            line-height: 1.7;
+            font-weight: 500;
+
+            color: #fff;
+
+            text-shadow: 1px 1px 4px #000;
         }
+
+        .fecha {
+            margin-top: 10px;
+
+            font-size: 16px;
+            line-height: 1.7;
+
+            font-weight: 600;
+        }
+
+        /* =========================
+           ANIMACIONES
+        ========================== */
 
         @keyframes fadeInCard {
             to {
@@ -211,6 +253,101 @@
                 opacity: 1;
             }
         }
+
+        @keyframes elegantGlow {
+
+            0%,
+            100% {
+                opacity: 0.85;
+                text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+            }
+
+            50% {
+                opacity: 1;
+                text-shadow:
+                    0 0 20px rgba(0, 212, 255, 0.9),
+                    0 0 35px rgba(0, 212, 255, 0.6);
+            }
+        }
+
+        /* =========================
+           RESPONSIVE MOVIL
+        ========================== */
+
+        @media screen and (max-width: 480px) {
+
+            .tarjeta {
+                width: 95vw;
+                height: 96dvh;
+
+                padding:
+                    75px 16px 75px;
+            }
+
+            .logo-superior {
+                height: 60px;
+                top: 10px;
+            }
+
+            .logo-inferior {
+                height: 50px;
+                bottom: 10px;
+            }
+
+            #tituloNombre {
+                font-size: 15px;
+            }
+
+            .nombre-profe {
+                font-size: 20px;
+            }
+
+            .electro-titulo {
+                font-size: 28px;
+                letter-spacing: 1px;
+            }
+
+            p {
+                font-size: 15px;
+            }
+
+            .texto-alumnos {
+                font-size: 14px;
+            }
+
+            .integrantes {
+                font-size: 13px;
+                line-height: 1.6;
+            }
+
+            .fecha {
+                font-size: 14px;
+            }
+        }
+
+        @media screen and (max-height: 700px) {
+
+            .tarjeta {
+                padding-top: 65px;
+                padding-bottom: 65px;
+            }
+
+            .contenido-central {
+                gap: 8px;
+            }
+
+            .nombre-profe {
+                font-size: 19px;
+            }
+
+            .electro-titulo {
+                font-size: 25px;
+            }
+
+            .integrantes {
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 
@@ -218,108 +355,247 @@
 
     <canvas id="fireworksCanvas"></canvas>
 
+    <!-- TELÓN -->
     <div class="curtain-container" id="curtain">
         <div class="door door-left"></div>
         <div class="door door-right"></div>
     </div>
 
+    <!-- TARJETA -->
     <div class="tarjeta">
-        <img src="images/logo1.png" alt="Logo 1" class="logo-img logo-superior">
+
+        <img src="images/logo1.png" alt="Logo Superior" class="logo-img logo-superior">
 
         <div class="contenido-central">
+
             <p id="tituloNombre"></p>
-            <div id="nombreInvitado" class="nombre-profe">Nombre Del Profesor</div>
+
+            <div id="nombreInvitado" class="nombre-profe">
+                Nombre Del Profesor
+            </div>
 
             <p>Presentación de:</p>
-            <div class="electro-titulo">ElectroLearn</div>
 
-            <div class="texto-alumnos">Alumnos:</div>
+            <div class="electro-titulo">
+                ElectroLearn
+            </div>
+
+            <div class="texto-alumnos">
+                Alumnos:
+            </div>
+
             <div class="integrantes">
                 Marilyn Mendez Hernandez<br>
                 Joshua Zaquiel Morales Bedolla<br>
                 Juan Manuel Simon Cancino
             </div>
 
-            <p style="margin-top: 15px;">📅 16 de mayo, 2026<br>⏰ 11:00 a.m.</p>
+            <div class="fecha">
+                📅 16 de mayo, 2026<br>
+                ⏰ 11:00 a.m.
+            </div>
+
         </div>
 
-        <img src="images/logo2.png" alt="Logo 2" class="logo-img logo-inferior">
+        <img src="images/logo2.png" alt="Logo Inferior" class="logo-img logo-inferior">
+
     </div>
 
     <script>
+
+        /* =========================
+           SECUENCIA
+        ========================== */
+
         function iniciarSecuencia() {
+
             setTimeout(() => {
-                document.getElementById('curtain').classList.add('opened');
+
+                document
+                    .getElementById('curtain')
+                    .classList
+                    .add('opened');
+
                 iniciarFuegos();
+
             }, 500);
         }
 
+        /* =========================
+           FUEGOS ARTIFICIALES
+        ========================== */
+
         const canvas = document.getElementById('fireworksCanvas');
         const ctx = canvas.getContext('2d');
+
         let particles = [];
 
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        function resize() {
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
         window.addEventListener('resize', resize);
+
         resize();
 
         class Particle {
+
             constructor(x, y, color) {
-                this.x = x; this.y = y; this.color = color;
-                this.vx = (Math.random() - 0.5) * 10;
-                this.vy = (Math.random() - 0.5) * 10;
+
+                this.x = x;
+                this.y = y;
+
+                this.color = color;
+
+                this.vx = (Math.random() - 0.5) * 8;
+                this.vy = (Math.random() - 0.5) * 8;
+
                 this.alpha = 1;
             }
+
             draw() {
+
                 ctx.globalAlpha = this.alpha;
+
                 ctx.fillStyle = this.color;
-                ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI * 2); ctx.fill();
+
+                ctx.beginPath();
+
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+
+                ctx.fill();
             }
-            update() { this.x += this.vx; this.y += this.vy; this.alpha -= 0.015; }
+
+            update() {
+
+                this.x += this.vx;
+                this.y += this.vy;
+
+                this.alpha -= 0.015;
+            }
         }
 
         function spawnExplosion() {
+
             const x = Math.random() * canvas.width;
+
             const y = Math.random() * (canvas.height * 0.7);
+
             const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
-            for (let i = 0; i < 40; i++) particles.push(new Particle(x, y, color));
+
+            for (let i = 0; i < 40; i++) {
+
+                particles.push(
+                    new Particle(x, y, color)
+                );
+            }
         }
 
         function iniciarFuegos() {
+
             function animate() {
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                ctx.fillStyle = 'rgba(0,0,0,0.2)';
+
+                ctx.fillRect(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height
+                );
+
                 particles.forEach((p, i) => {
-                    if (p.alpha <= 0) particles.splice(i, 1);
-                    else { p.update(); p.draw(); }
+
+                    if (p.alpha <= 0) {
+
+                        particles.splice(i, 1);
+
+                    } else {
+
+                        p.update();
+                        p.draw();
+                    }
                 });
+
                 requestAnimationFrame(animate);
             }
+
             animate();
+
             setInterval(spawnExplosion, 600);
         }
 
+        /* =========================
+           INVITADOS
+        ========================== */
+
         const invitados = [
-            { nombre: "Ing. Maria del Rosario Castillo Diaz", tituloNombre: "Estimada Directora" },
-            { nombre: "Lic. Armando Mena", tituloNombre: "Estimado Subdirector" },
-            { nombre: "Lic. David López Arista", tituloNombre: "Estimado Profesor" },
-            { nombre: "Ing. Fabian Amado Tlapanco", tituloNombre: "Estimado Profesor" },
-            { nombre: "Lic. Jesus Osvaldo Olvera Ponce", tituloNombre: "Estimado Profesor" },
-            { nombre: "Lic. Amairani Guzman Mendoza", tituloNombre: "Estimada Profesora" }
+
+            {
+                nombre: "Ing. Maria del Rosario Castillo Diaz",
+                tituloNombre: "Estimada Directora"
+            },
+
+            {
+                nombre: "Lic. Armando Mena",
+                tituloNombre: "Estimado Subdirector"
+            },
+
+            {
+                nombre: "Lic. David López Arista",
+                tituloNombre: "Estimado Profesor"
+            },
+
+            {
+                nombre: "Ing. Fabian Amado Tlapanco",
+                tituloNombre: "Estimado Profesor"
+            },
+
+            {
+                nombre: "Lic. Jesus Osvaldo Olvera Ponce",
+                tituloNombre: "Estimado Profesor"
+            },
+
+            {
+                nombre: "Lic. Amairani Guzman Mendoza",
+                tituloNombre: "Estimada Profesora"
+            }
         ];
 
         const urlParams = new URLSearchParams(window.location.search);
-        const idInvitado = urlParams.get('idInvitado');
-        const cotenedorNombre = document.getElementById("nombreInvitado");
-        const contendorTituloNombre = document.getElementById("tituloNombre");
 
-        if (idInvitado !== null && invitados[idInvitado]) {
-            cotenedorNombre.textContent = invitados[idInvitado].nombre;
-            contendorTituloNombre.textContent = invitados[idInvitado].tituloNombre;
+        const idInvitado = urlParams.get('idInvitado');
+
+        const cotenedorNombre =
+            document.getElementById("nombreInvitado");
+
+        const contendorTituloNombre =
+            document.getElementById("tituloNombre");
+
+        if (
+            idInvitado !== null &&
+            invitados[idInvitado]
+        ) {
+
+            cotenedorNombre.textContent =
+                invitados[idInvitado].nombre;
+
+            contendorTituloNombre.textContent =
+                invitados[idInvitado].tituloNombre;
+
         } else {
-            cotenedorNombre.textContent = "Profesor(a)";
-            contendorTituloNombre.textContent = "Estimado(a)";
+
+            cotenedorNombre.textContent =
+                "Profesor(a)";
+
+            contendorTituloNombre.textContent =
+                "Estimado(a)";
         }
+
     </script>
+
 </body>
 
 </html>
