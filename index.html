@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitación ElectroLearn</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -20,7 +20,7 @@
             align-items: center;
             min-height: 100vh;
             overflow: hidden;
-            font-family: 'Great Vibes', cursive;
+            font-family: 'Montserrat', sans-serif;
             color: white;
         }
 
@@ -55,13 +55,8 @@
             transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .opened .door-left {
-            transform: translateX(-100%);
-        }
-
-        .opened .door-right {
-            transform: translateX(100%);
-        }
+        .opened .door-left { transform: translateX(-100%); }
+        .opened .door-right { transform: translateX(100%); }
 
         /* 3. TARJETA */
         .tarjeta {
@@ -70,14 +65,15 @@
             width: 90vw;
             max-width: 380px;
             height: 90vh;
-            border-radius: 30px;
+            
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
             text-align: center;
-            padding: 20px;
-            overflow: hidden;
+            /* Ajuste de padding: menos arriba para subir el primer logo */
+            padding: 15px 25px 40px 25px;
+            /*overflow: hidden;*/
             border: 1px solid rgba(255, 255, 255, 0.2);
             opacity: 0;
             animation: fadeInCard 1.5s forwards 1.5s;
@@ -91,21 +87,33 @@
             width: 100%;
             height: 100%;
             background: url('images/fondo.jpg') center/cover no-repeat;
-            opacity: 0.5;
+            opacity: 0.6;
             z-index: -1;
         }
 
-        /* 4. LOGOS - CORREGIDOS */
+        /* 4. LOGOS - AJUSTADOS HACIA ARRIBA */
         .logo-img {
-            height: 90px;
-            /* Altura fija para asegurar visibilidad */
+            height: 60px;
+            position: absolute;
+            
             width: auto;
             object-fit: contain;
             flex-shrink: 0;
-            /* EVITA QUE EL TEXTO LO APLASTE */
             opacity: 0;
             z-index: 20;
             animation: fadeIn 1s forwards 2.5s;
+        }
+
+        .logo-superior {
+            top: -.5em;
+            z-index: 9999;
+            
+            margin-top: 5px; /* Sube el logo inicial */
+        }
+
+        .logo-inferior {
+            bottom: -1em;
+            margin-bottom: 20px; /* Despega el logo del borde inferior */
         }
 
         /* 5. CONTENIDO */
@@ -114,91 +122,73 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 5px;
+            gap: 10px;
             width: 100%;
             opacity: 0;
             animation: fadeIn 1s forwards 3.5s;
         }
 
-        .shake-text {
-            display: inline-block;
-            animation: shake 0.6s infinite;
-        }
-
-        h1 {
-            font-size: 38px;
-            text-shadow: 2px 2px 10px #000;
-            color: #ffd700;
-            margin-bottom: 5px;
-        }
-
         p {
-            font-size: 24px;
-            line-height: 1.1;
+            font-size: 17px;
+            font-weight: 300;
+            text-shadow: 1px 1px 5px #000;
         }
 
         .nombre-profe {
-            font-size: 34px;
-            color: #fff;
-            margin: 5px 0;
+            font-size: 23px;
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 8px #000;
         }
 
-        button {
-            background: linear-gradient(45deg, #1e3c72, #2a5298);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-family: 'Great Vibes', cursive;
-            font-size: 20px;
-            cursor: pointer;
+        .electro-titulo {
+            font-size: 30px;
+            font-weight: 600;
+            color: #00d4ff;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            animation: elegantGlow 3s ease-in-out infinite;
+            margin: 8px 0;
+        }
+
+        @keyframes elegantGlow {
+            0%, 100% { 
+                text-shadow: 0 0 10px rgba(0,212,255,0.2); 
+                opacity: 0.8;
+            }
+            50% { 
+                text-shadow: 0 0 20px rgba(0,212,255,0.8), 0 0 30px rgba(0,212,255,0.4); 
+                opacity: 1;
+            }
+        }
+
+        .texto-alumnos {
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffd700;
             margin-top: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
-            flex-shrink: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* ANIMACIONES */
-        @keyframes fadeInCard {
-            to {
-                opacity: 1;
-                box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
-            }
+        .integrantes {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #ffffff;
+            font-weight: 400;
+            text-shadow: 1px 1px 3px #000;
         }
 
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
+        @keyframes fadeInCard { to { opacity: 1; box-shadow: 0 0 40px rgba(0, 0, 0, 0.8); } }
+        @keyframes fadeIn { to { opacity: 1; } }
 
-        @keyframes shake {
-            0% {
-                transform: translate(1px, 1px) rotate(0deg);
-            }
-
-            25% {
-                transform: translate(-1px, -1px) rotate(-0.5deg);
-            }
-
-            50% {
-                transform: translate(-2px, 0px) rotate(0.5deg);
-            }
-
-            75% {
-                transform: translate(2px, 1px) rotate(0deg);
-            }
-
-            100% {
-                transform: translate(1px, -1px) rotate(0.5deg);
-            }
-        }
     </style>
 </head>
 
 <body onload="iniciarSecuencia()">
 
     <canvas id="fireworksCanvas"></canvas>
-    <audio id="aplausos" src="https://www.soundjay.com/human/applause-01.mp3"></audio>
 
     <div class="curtain-container" id="curtain">
         <div class="door door-left"></div>
@@ -206,21 +196,26 @@
     </div>
 
     <div class="tarjeta">
-        <img src="images/logo1.png" alt="Logo 1" class="logo-img">
+        <img src="images/logo1.png" alt="Logo 1" class="logo-img logo-superior" >
 
         <div class="contenido-central">
-            <h1 class="shake-text">Invitación Especial</h1>
             <p id="tituloNombre"></p>
-            <div id="nombreInvitado" class="nombre-profe shake-text">Nombre Del Profesor</div>
+            <div id="nombreInvitado" class="nombre-profe">Nombre Del Profesor</div>
+            
             <p>Presentación de:</p>
-            <div class="shake-text" style="font-size: 34px; color: #00d4ff;">💡 ElectroLearn</div>
-            <p>📅 16 de mayo, 2026<br>⏰ 11:00 a.m.</p>
-            <div>
-                <button onclick="confirmar()">Confirmar asistencia</button>
+            <div class="electro-titulo">ElectroLearn</div>
+            
+            <div class="texto-alumnos">Alumnos:</div>
+            <div class="integrantes">
+                Marilyn Mendez Hernandez<br>
+                Joshua Zaquiel Morales Bedolla<br>
+                Juan Manuel Simon Cancino
             </div>
+
+            <p style="margin-top: 15px;">📅 16 de mayo, 2026<br>⏰ 11:00 a.m.</p>
         </div>
 
-        <img src="images/logo2.jpg" alt="Logo 2" class="logo-img">
+        <img src="images/logo2.png" alt="Logo 2" class="logo-img logo-inferior">
     </div>
 
     <script>
@@ -229,11 +224,6 @@
                 document.getElementById('curtain').classList.add('opened');
                 iniciarFuegos();
             }, 500);
-        }
-
-        function confirmar() {
-            alert("¡Asistencia confirmada!");
-            document.getElementById('aplausos').play();
         }
 
         const canvas = document.getElementById('fireworksCanvas');
@@ -280,32 +270,27 @@
             setInterval(spawnExplosion, 600);
         }
 
+        const invitados = [
+            { nombre: "Ing. Maria del Rosario Castillo Diaz", tituloNombre: "Estimada Directora" },
+            { nombre: "Lic. Armando Mena", tituloNombre: "Estimado Subdirector" },
+            { nombre: "Lic. David López Arista", tituloNombre: "Estimado Profesor" },
+            { nombre: "Ing. Fabian Amado Tlapanco", tituloNombre: "Estimado Profesor" },
+            { nombre: "Lic. Jesus Osvaldo Olvera Ponce", tituloNombre: "Estimado Profesor" },
+            { nombre: "Lic. Amairani Guzman Mendoza", tituloNombre: "Estimada Profesora" }
+        ];
+
         const urlParams = new URLSearchParams(window.location.search);
-
-        const invitados = [{
-            nombre: "Ing. Rosario",
-            tituloNombre: "Estimada Directora"
-
-        },
-        {
-            nombre: "Lic. Armando Mena",
-            tituloNombre: "Estimado subdirector"
-
-        },
-        {
-            nombre: "Lic. David López Ariste",
-            tituloNombre: "Estimado profesor"
-        }
-        ]
-
-        // 2. Leer un valor
         const idInvitado = urlParams.get('idInvitado');
         const cotenedorNombre = document.getElementById("nombreInvitado");
-        const contendorTituloNombre = document.getElementById("tituloNombre")
-        cotenedorNombre.textContent = invitados[idInvitado].nombre
-        contendorTituloNombre.textContent = invitados[idInvitado].tituloNombre
+        const contendorTituloNombre = document.getElementById("tituloNombre");
 
+        if (idInvitado !== null && invitados[idInvitado]) {
+            cotenedorNombre.textContent = invitados[idInvitado].nombre;
+            contendorTituloNombre.textContent = invitados[idInvitado].tituloNombre;
+        } else {
+            cotenedorNombre.textContent = "Profesor(a)";
+            contendorTituloNombre.textContent = "Estimado(a)";
+        }
     </script>
 </body>
-
 </html>
