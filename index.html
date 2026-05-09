@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invitación Pro: ElectroLearn</title>
+
+<!-- FUENTE CALIGRAFÍA -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    background: #050505;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* TELÓN */
+.container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    z-index: 10000;
+}
+
+.door {
+    width: 50%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        to right,
+        #800000,
+        #a00000 10px,
+        #700000 20px
+    );
+    box-shadow: inset 0 0 60px rgba(0,0,0,0.9);
+}
+
+.door-left { animation: openLeft 2s forwards; }
+.door-right { animation: openRight 2s forwards; }
+
+@keyframes openLeft { 100% { transform: translateX(-100%); } }
+@keyframes openRight { 100% { transform: translateX(100%); } }
+
+/* TARJETA */
+.tarjeta { 
+    width: 90vw;
+    height: 90vh;
+    max-width: 360px;
+    max-height: 540px;
+    background-image: url('images/fondo.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    opacity: 0.9;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+}
+
+/* CONTENIDO CENTRADO Y CALIGRAFÍA */
+.contenido { 
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: white;
+    font-family: 'Great Vibes', cursive;
+    letter-spacing: 1px;
+}
+
+/* LOGOS */
+.logo {
+    max-width: 120px;
+    margin: 10px auto;
+    opacity: 0;
+    animation: aparecerLogo 1s forwards;
+}
+
+.logo-top { animation-delay: 2.5s; }
+.logo-bottom { animation-delay: 3s; }
+
+@keyframes aparecerLogo {
+    to { opacity: 1; transform: scale(1.1); }
+}
+
+/* TEXTO */
+.contenido h1,
+.contenido h2,
+.contenido h3,
+.contenido p,
+.contenido button {
+    opacity: 0;
+    animation: aparecerTexto 1s forwards;
+    animation-delay: 3.5s;
+}
+.contenido p{
+    font-size: 25px;
+}
+
+@keyframes aparecerTexto {
+    to { opacity: 1; }
+}
+
+/* TEMBLOR */
+@keyframes temblor {
+    0% { transform: translate(0,0); }
+    25% { transform: translate(1px,-1px); }
+    50% { transform: translate(-1px,1px); }
+    75% { transform: translate(1px,1px); }
+    100% { transform: translate(0,0); }
+}
+
+.nombre, h1, h3 {
+    animation: aparecerTexto 1s forwards, temblor 0.3s infinite;
+    animation-delay: 3.5s, 4.5s;
+}
+
+/* BOTÓN */
+button {
+    background: linear-gradient(45deg, #2a5298, #1e3c72);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+button:hover {
+    transform: scale(1.1);
+}
+
+.fecha{
+    font-size: 20px;
+    margin: 15px 0;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.7);
+}
+
+/* FUEGOS */
+#fireworksCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- AUDIO -->
+<audio id="aplausos" src="https://www.soundjay.com/human/applause-01.mp3"></audio>
+
+<!-- TELÓN -->
+<div class="container">
+    <div class="door door-left"></div>
+    <div class="door door-right"></div>
+</div>
+
+<canvas id="fireworksCanvas"></canvas>
+
+<!-- TARJETA -->
+<div class="tarjeta">
+    <div class="contenido">
+
+        <img src="images/logo1.png" class="logo logo-top">
+
+        <h1>🎓 Invitación Especial</h1>
+        <h2>Estimado/a</h2>
+        <h2 class="nombre">Nombre Del Profesor</h2>
+        <p>Está cordialmente invitado a la presentación:</p>
+        <p class="fecha">📅 16 de mayo de 2026<br>⏰ 11:00 a.m.</p>
+        <h3>💡 ElectroLearn</h3>
+
+        <button onclick="confirmar()">Confirmar asistencia</button>
+
+        <img src="images/logo2.jpg" class="logo logo-bottom">
+
+    </div>
+</div>
+
+<script>
+// APLAUSOS
+document.addEventListener("click", () => {
+    document.getElementById("aplausos").play();
+}, { once: true });
+
+// FUEGOS
+const canvas = document.getElementById('fireworksCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+window.onresize = resize;
+resize();
+
+class Particle {
+    constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.vx = (Math.random() - 0.5) * 8;
+        this.vy = (Math.random() - 0.5) * 8;
+        this.alpha = 1;
+        this.decay = 0.02;
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.alpha -= this.decay;
+    }
+
+    draw() {
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+function createExplosion(x, y) {
+    const color = `hsl(${Math.random() * 360}, 100%, 60%)`;
+    for (let i = 0; i < 50; i++) {
+        particles.push(new Particle(x, y, color));
+    }
+}
+
+function animate() {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach((p, i) => {
+        p.update();
+        p.draw();
+        if (p.alpha <= 0) particles.splice(i, 1);
+    });
+
+    requestAnimationFrame(animate);
+}
+
+setInterval(() => {
+    createExplosion(Math.random() * canvas.width, Math.random() * canvas.height * 0.5);
+}, 800);
+
+animate();
+
+function confirmar() {
+    alert("¡Gracias por confirmar!");
+}
+</script>
+
+</body>
+</html>
